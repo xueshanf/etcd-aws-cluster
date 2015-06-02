@@ -98,12 +98,7 @@ if [[ $etcd_existing_peer_urls && $etcd_existing_peer_names != *"$ec2_instance_i
     	exit 7
     fi
     
-        cat > "$etcd_peers_file_path" <<EOF
-ETCD_INITIAL_CLUSTER_STATE=existing
-ETCD_NAME=$ec2_instance_id
-ETCD_INITIAL_CLUSTER="$etcd_initial_cluster"
-EOF
-    
+    echo " --initial-cluster-state existing --name $ec2_instance_id --initial-cluster $etcd_initial_cluster " > "$etcd_peers_file_path"
 else
     # create a new cluster
     echo "creating new cluster"
@@ -115,9 +110,5 @@ else
         exit 9
     fi
 
-    cat > "$etcd_peers_file_path" <<EOF
-ETCD_INITIAL_CLUSTER_STATE=new
-ETCD_NAME=$ec2_instance_id
-ETCD_INITIAL_CLUSTER="$etcd_initial_cluster"
-EOF
+    echo " --initial-cluster-state new --name $ec2_instance_id --initial-cluster $etcd_initial_cluster " > "$etcd_peers_file_path"
 fi
